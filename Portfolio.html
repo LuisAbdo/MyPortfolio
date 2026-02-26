@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer X</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#ffffff;--fg:#0b0b0b;--muted:#6b7280;--accent:#1f6feb;--panel-fg:#ffffff}
+    html,body{height:100%;scroll-behavior:smooth}
+    body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);color:var(--fg);overflow-x:hidden}
+
+    nav{display:flex;align-items:center;justify-content:center;padding:28px 6%;z-index:20;position:relative}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700;position:absolute;left:6%}
+    .menu{display:flex;gap:36px}
+    .menu a{color:var(--muted);font-weight:600}
+    a{text-decoration:none;color:inherit}
+
+    /* HERO */
+    .hero{position:relative;min-height:92vh;padding:40px 6%;display:flex;align-items:center}
+    /* big faint background word behind everything */
+    .bg-code{position:absolute;inset:0;display:grid;place-items:center;z-index:1;pointer-events:none}
+    .bg-code .word{font-weight:900;font-size:30vw;line-height:0.9;color:rgba(11,11,11,0.20);user-select:none;opacity:1;transform:translate3d(0,0,0);}
+    .container{width:100%;max-width:1200px;margin:0 auto;display:flex;align-items:flex-start;gap:40px;position:relative}
+    .hero-left{flex:1;position:relative;z-index:30}
+    /* typing text */
+    .typing{display:inline-block;white-space:pre-wrap;font-weight:800}
+    .typing .cursor{display:inline-block;width:2px;height:1.05em;background:var(--fg);margin-left:8px;vertical-align:bottom;opacity:1;animation:blink 1s steps(1) infinite}
+    @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+    .bar{width:70px;height:6px;background:#000;opacity:.12;margin-bottom:26px}
+    .hero-left h1{font-size:64px;line-height:1.02;margin-bottom:18px;font-weight:800}
+    .hero-left p{color:var(--muted);margin-bottom:28px;max-width:520px}
+    .cta{display:inline-flex;align-items:center;gap:12px;background:var(--accent);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:700}
+
+    /* hero photo (natural size, centered, no continuous motion) */
+    .hero-photo{position:absolute;left:50%;top:50%;/* base translate then adjustments from CSS vars */transform:translate(-50%,-50%) translate(var(--adj-x,0px), var(--adj-y,0px)) scale(var(--adj-scale,1));z-index:6;pointer-events:none}
+    .hero-photo img{display:block;width:auto;height:auto;border-radius:6px}
+
+    /* inner wrapper handles entrance translate and pendulum rotation via CSS vars */
+    .hero-photo-inner{--inner-ty:28px;--inner-float:0px;--pendulum-rot:0deg;transform:translateY(calc(var(--inner-ty) + var(--inner-float))) rotate(var(--pendulum-rot));transition:transform .3s ease;transform-origin:50% 0%}
+    .hero-photo-inner img{display:block;width:auto;height:auto;border-radius:6px;opacity:1}
+
+    .hero-photo.visible .hero-photo-inner{animation:swipeUp .8s cubic-bezier(.2,.9,.2,1) forwards}
+    @keyframes swipeUp{from{--inner-ty:28px;opacity:0}to{--inner-ty:0px;opacity:1}}
+
+    /* pendulum animation updates custom property --pendulum-rot */
+     /* pendulum animation - adjust speed by changing --pendulum-duration below.
+       Smaller duration = faster swing. Example: 6s is noticeably faster than 14s. */
+    :root{--pendulum-duration:6s}
+    /* animations disabled: keep hero photo static after reveal */
+    .hero-photo-inner.pendulum{animation:none}
+    /* floating uses a custom property to avoid clobbering transform */
+    .hero-photo-inner.floating{animation:none}
+    .hero-photo-inner.pendulum.floating{animation:none}
+    @keyframes pendulum{from{--pendulum-rot:-2deg}to{--pendulum-rot:2deg}}
+    @keyframes floatVar{from{--inner-float:-10px}to{--inner-float:10px}}
+
+    /* hero adjust tab & panel */
+    .hero-adjust-tab{position:absolute;right:6%;top:50%;transform:translateY(-50%);z-index:50;width:44px;height:44px;border-radius:8px;display:grid;place-items:center;border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,0.9);cursor:pointer}
+    .hero-adjust-panel{position:fixed;right:20px;top:50%;transform:translateY(-50%);width:300px;background:#fff;color:var(--fg);border:1px solid rgba(0,0,0,.08);box-shadow:0 8px 30px rgba(11,11,11,.06);padding:12px;border-radius:10px;z-index:60;display:none}
+    .hero-adjust-panel.open{display:block}
+    .adjust-row{display:flex;align-items:center;gap:8px;margin:8px 0}
+    .adjust-row label{width:56px;font-size:13px;color:var(--muted)}
+    .adjust-row input[type=range]{flex:1}
+    .adjust-controls{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+    .adjust-controls button{padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,.08);background:transparent;cursor:pointer}
+
+    /* right side cards */
+    .hero-right{width:320px;margin-left:auto;z-index:5;padding-top:48px}
+    .card{border-top:1px solid rgba(0,0,0,.06);padding-top:26px;margin-bottom:26px}
+    .card h3{font-size:13px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+    .card p{color:rgba(11,11,11,.8);font-size:14px;margin-bottom:10px}
+
+    .socials{display:flex;gap:16px}
+    .socials a{width:44px;height:44px;display:inline-grid;place-items:center;border-radius:50%;border:1px solid rgba(0,0,0,.12);background:transparent;color:var(--fg);transition:transform .12s ease,background .12s}
+    .socials a:hover{transform:translateY(-4px);background:rgba(255,255,255,0.02)}
+
+    .scroll-down{margin-top:40px;display:inline-flex;background:var(--accent);width:58px;height:58px;border-radius:50%;align-items:center;justify-content:center}
+
+    /* ABOUT section */
+    .about-section{padding:80px 6%;background:transparent;transition:background .8s ease,color .6s ease}
+    .about-section.inview{background:linear-gradient(90deg,#ffffff,#f7f7f7)}
+    .about-inner{max-width:1200px;margin:0 auto;display:flex;gap:40px;align-items:center}
+    .about-left{flex:1}
+    .decor-line{width:56px;height:3px;background:var(--accent);margin-bottom:18px;border-radius:3px}
+    .about-left h2{font-size:28px;margin-bottom:12px}
+    .about-left p{color:rgba(11,11,11,.9);line-height:1.6}
+    .mini-lines{margin-top:20px;display:flex;gap:12px}
+    .mini-lines span{display:block;width:64px;height:2px;background:rgba(255,255,255,.06);border-radius:2px}
+
+    .about-photo{flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+    .about-photo img{width:auto;height:480px;object-fit:cover;border-radius:6px;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%);-webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%)}
+    .about-photo.visible img{opacity:1;transform:none}
+
+    /* SKILLS section */
+    .skills-section{padding:80px 6%}
+    .skills-inner{max-width:1200px;margin:0 auto}
+    /* Shelf / marquee style for learned languages (images only) */
+    /* make the shelf full-bleed and larger icons */
+    .skills-section{padding:80px 0}
+    .skills-rect{background:linear-gradient(180deg,#111,#1a1a1a);color:var(--panel-fg);width:100vw;max-width:none;margin-left:calc(50% - 50vw);padding:22px 30px;border-radius:0;box-shadow:0 14px 30px rgba(0,0,0,.25);opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.2,.9,.2,1),transform .6s cubic-bezier(.2,.9,.2,1)}
+    .skills-rect.visible{opacity:1;transform:none}
+    .shelf{width:100%;overflow:hidden;padding:6px 6px}
+    .marquee{display:flex;gap:28px;align-items:center;white-space:nowrap}
+    .marquee-track{display:flex;gap:28px;align-items:center;animation:marquee 16s linear infinite}
+    .marquee-track img{width:120px;height:120px;object-fit:contain;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.45);background:transparent;padding:12px}
+    .marquee-container{display:flex;gap:24px;align-items:center}
+    .marquee-wrap{display:flex;align-items:center}
+    .marquee-wrap:hover .marquee-track{animation-play-state:paused}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* misc responsive */
+    @media(max-width:1100px){
+      .container{flex-direction:column;align-items:center;padding:0 4%}
+      .hero-left{text-align:center}
+      .hero-left h1{font-size:40px}
+      .about-inner{flex-direction:column-reverse;align-items:center}
+      .about-photo img{width:60vw;height:auto}
+      .about-photo{flex:0 0 auto;margin:0}
+      .hero-right{width:100%;margin-left:0;padding-top:18px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+      .hero-right .card{flex:1 1 220px;max-width:320px}
+    }
+    @media(max-width:900px){
+      .hero{padding:28px 4%}
+      .container{gap:20px}
+      /* make hero photo stack above content on small screens */
+      .hero-photo{position:relative;left:auto;top:auto;transform:none;order:-1;margin:0 auto 12px;pointer-events:auto}
+      .hero-photo img{width:56vw;height:auto;border-radius:8px}
+      .bg-code .word{font-size:18vw}
+      .menu{gap:18px}
+    }
+    @media(max-width:700px){
+      .skills-rect{width:100%;padding:14px}
+      .marquee-track img{width:86px;height:86px;padding:8px}
+      nav{padding:16px 4%}
+      .menu{gap:12px;font-size:14px}
+      .hero-left h1{font-size:28px}
+      .hero-left p{max-width:100%}
+      /* reduce bg word on tiny screens */
+      .bg-code .word{font-size:22vw;opacity:.08}
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo"><span class="mark"> <span><span style="color:#1f6feb;">L</span>.Abdo</span></div>
+    <div class="menu"><a href="#">Home</a><a href="#">About</a><a href="#">Portfolio</a></div>
+  </nav>
+
+  <section class="hero">
+    <div class="bg-code"><div class="word">CODE</div></div>
+    <div class="container">
+      <div class="hero-left">
+        <div class="bar"></div>
+        <h1><span class="typing" id="typingWrap"><span id="typingText"></span><span class="cursor"></span></span></h1>
+        <p>Desenvolvedor em formação, fissurado pelo mundo digital.</p>
+        
+      </div>
+
+      <div class="hero-right">
+        <div class="card"><h3>About Me</h3><p>Desenvolvedor apaixonado por tecnologia.</p><a href="#aboutSection">Learn More →</a></div>
+        <div class="card"><h3>My Work</h3><p>Projetos focados em performance.</p><a href="#">Browse Portfolio →</a></div>
+        <div class="card"><h3>Follow Me</h3>
+          <div class="socials">
+            <a href="https://www.linkedin.com/in/luis-abdo-2a31a7352/" aria-label="linkedin" title="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.98 3.5a2.29 2.29 0 11.001 4.579A2.29 2.29 0 014.98 3.5zM3 8.99h4v12H3v-12zM9 8.99h3.79v1.6h.05c.53-1 1.83-2.06 3.77-2.06C20.8 8.52 21 11 21 13.86v6.63H17v-6.2c0-1.48-.03-3.38-2.06-3.38-2.06 0-2.38 1.61-2.38 3.28v6.3H9v-12z" fill="currentColor"/></svg>
+            </a>
+            <a href="https://github.com/LuisAbdo" aria-label="github" title="GitHub" target="_blank" rel="noopener noreferrer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 .5A12 12 0 000 12.6c0 5.3 3.4 9.8 8.2 11.4.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 1.6.8 2.2 1.2.2-.9.4-1.5.8-1.9-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.3 1.2a11.3 11.3 0 016 0C18 4 19 4.3 19 4.3c.6 1.7.2 3 .1 3.3.7.8 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.7 1 .7 2v3c0 .3.2.8.8.6A12 12 0 0024 12.6 12 12 0 0012 .7z" fill="currentColor"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-photo" id="heroPhoto">
+        <div class="hero-photo-inner" id="heroPhotoInner">
+          <img src="imgs/ChatGPT Image 25 de fev. de 2026, 12_22_21.png" alt="Foto do desenvolvedor">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Adjust panel (hidden by default) -->
+  <div class="hero-adjust-panel" id="adjustPanel" aria-hidden="true">
+    <div style="font-weight:700;margin-bottom:8px">Ajustar imagem</div>
+    <div class="adjust-row"><label>Scale</label><input id="adjScale" type="range" min="0.3" max="2" step="0.01" value="0.66"><div id="adjScaleVal" style="width:44px;text-align:right">66%</div></div>
+    <div class="adjust-row"><label>X</label><input id="adjX" type="range" min="-500" max="500" step="1" value="-28"><div id="adjXVal" style="width:44px;text-align:right">-28px</div></div>
+    <div class="adjust-row"><label>Y</label><input id="adjY" type="range" min="-500" max="500" step="1" value="113"><div id="adjYVal" style="width:44px;text-align:right">113px</div></div>
+    <div class="adjust-controls">
+      <button id="adjReset">Reset</button>
+      <button id="adjClose">Fechar</button>
+    </div>
+  </div>
+
+  <section class="about-section" id="aboutSection" hre MEf="aboutme">
+    <div class="about-inner">
+      <div class="about-left">
+        <div class="decor-line"></div>
+        <h2>Sobre mim</h2>
+        <p>Sou estudante de Desenvolvimento de Software, com foco na construção de soluções através de lógica, estrutura e organização de código. Atualmente no primeiro semestre, venho desenvolvendo uma base sólida em algoritmos, raciocínio lógico e fundamentos da programação.
+
+Tenho forte interesse em entender como sistemas funcionam por trás da interface — desde estruturas de dados até organização de projetos e boas práticas.
+
+Paralelamente, a internet é um hobby onde aplico criatividade, storytelling e estratégias de retenção de atenção. Produzo animações e conteúdo digital voltado ao universo Roblox, o que me proporcionou experiência prática com comportamento de público, análise de engajamento e construção de narrativas que mantêm interesse.
+
+Acredito que unir lógica técnica com visão criativa é um diferencial. Busco evoluir constantemente tanto como programador quanto como criador.</p>
+        <div class="mini-lines"><span></span><span style="width:40px"></span><span style="width:80px"></span></div>
+      </div>
+      <div class="about-photo" id="aboutPhoto">
+        <img src="imgs/WhatsApp Image 2026-02-25 at 12.01.07.jpeg" alt="Foto 1080">
+      </div>
+    </div>
+  </section>
+
+  <section class="skills-section" id="skillsSection">
+    <div class="skills-inner">
+      <div class="skills-rect" id="skillsRect">
+        <div class="shelf">
+          <div class="marquee-wrap">
+            <div class="marquee-track" aria-hidden="true">
+              <img src="imgs/html.svg" alt="HTML">
+              <img src="imgs/css.svg" alt="CSS">
+              <img src="imgs/javascript.svg" alt="JavaScript">
+              <img src="imgs/php.svg" alt="PHP">
+              <img src="imgs/c#.svg" alt="C#">
+              <img src="imgs/mysql.svg" alt="MySQL">
+              <!-- duplicated items for seamless loop -->
+              <img src="imgs/html.svg" alt="HTML">
+              <img src="imgs/css.svg" alt="CSS">
+              <img src="imgs/javascript.svg" alt="JavaScript">
+              <img src="imgs/php.svg" alt="PHP">
+              <img src="imgs/c#.svg" alt="C#">
+              <img src="imgs/mysql.svg" alt="MySQL">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Hero image reveal (swipe up)
+    const heroPhoto = document.getElementById('heroPhoto');
+    const heroPhotoInner = document.getElementById('heroPhotoInner');
+    const heroImg = heroPhotoInner.querySelector('img');
+    function revealHero(){
+      heroPhoto.classList.add('visible');
+      // animations intentionally removed: keep image revealed but static
+    }
+    if(heroImg.complete && heroImg.naturalWidth) revealHero(); else heroImg.addEventListener('load', revealHero);
+
+    // Scroll button removed
+
+    // IntersectionObserver for about section (background + reveal photo)
+    const aboutSection = document.getElementById('aboutSection');
+    const aboutPhoto = document.getElementById('aboutPhoto');
+    const aboutImg = aboutPhoto.querySelector('img');
+    if(window.IntersectionObserver){
+      const obs = new IntersectionObserver(entries=>{
+        entries.forEach(en=>{
+              if(en.isIntersecting){
+                aboutSection.classList.add('inview');
+                if(aboutImg.complete && aboutImg.naturalWidth) aboutPhoto.classList.add('visible'); else aboutImg.addEventListener('load', ()=> aboutPhoto.classList.add('visible'));
+              }
+        })
+      },{threshold:0.18});
+      obs.observe(aboutSection);
+    } else { aboutSection.classList.add('inview'); aboutPhoto.classList.add('visible') }
+
+    // Skills rect reveal
+    const skillsRect = document.getElementById('skillsRect');
+    const skillsSection = document.getElementById('skillsSection');
+    if(window.IntersectionObserver){
+      const obs2 = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) skillsRect.classList.add('visible') }) },{threshold:0.25});
+      obs2.observe(skillsSection);
+    } else { skillsRect.classList.add('visible') }
+
+    // Hero image adjust panel logic
+    const adjustTab = document.getElementById('adjustTab');
+    const adjustPanel = document.getElementById('adjustPanel');
+    const adjScale = document.getElementById('adjScale');
+    const adjX = document.getElementById('adjX');
+    const adjY = document.getElementById('adjY');
+    const adjScaleVal = document.getElementById('adjScaleVal');
+    const adjXVal = document.getElementById('adjXVal');
+    const adjYVal = document.getElementById('adjYVal');
+    const adjReset = document.getElementById('adjReset');
+    const adjClose = document.getElementById('adjClose');
+
+    function applyAdjustments(fromStorage){
+      const s = fromStorage || {};
+      const scale = s.scale ?? parseFloat(adjScale.value);
+      const x = s.x ?? parseInt(adjX.value,10);
+      const y = s.y ?? parseInt(adjY.value,10);
+      heroPhoto.style.setProperty('--adj-scale', scale);
+      heroPhoto.style.setProperty('--adj-x', x + 'px');
+      heroPhoto.style.setProperty('--adj-y', y + 'px');
+      adjScaleVal.textContent = Math.round(scale*100) + '%';
+      adjXVal.textContent = x + 'px';
+      adjYVal.textContent = y + 'px';
+    }
+
+    function saveAdjustments(){
+      const state = {scale: parseFloat(adjScale.value), x: parseInt(adjX.value,10), y: parseInt(adjY.value,10)};
+      localStorage.setItem('heroAdjust', JSON.stringify(state));
+    }
+
+    // load saved
+    try{
+      const saved = JSON.parse(localStorage.getItem('heroAdjust'));
+      if(saved){ if(saved.scale !== undefined) adjScale.value = saved.scale; if(saved.x !== undefined) adjX.value = saved.x; if(saved.y !== undefined) adjY.value = saved.y; applyAdjustments(saved); }
+    }catch(e){/* ignore */}
+
+    // always apply current inputs (defaults) so the hero reflects config when no saved state
+    applyAdjustments();
+
+    // open/close (guard in case the trigger is not present)
+    if(adjustTab) adjustTab.addEventListener('click', ()=>{ adjustPanel.classList.toggle('open'); adjustPanel.setAttribute('aria-hidden', !adjustPanel.classList.contains('open')) });
+    adjClose.addEventListener('click', ()=>{ adjustPanel.classList.remove('open'); adjustPanel.setAttribute('aria-hidden','true') });
+
+    
+    [adjScale, adjX, adjY].forEach(el=> el.addEventListener('input', ()=>{ applyAdjustments(); saveAdjustments(); }));
+    adjReset.addEventListener('click', ()=>{
+      adjScale.value = 1; adjX.value = 0; adjY.value = 0; applyAdjustments(); saveAdjustments();
+    });
+
+    (function(){
+      const typingTextEl = document.getElementById('typingText');
+      const typingWrap = document.getElementById('typingWrap');
+      if(!typingTextEl || !typingWrap) return;
+      const cursor = typingWrap.querySelector('.cursor');
+      const lines = ["I'm Luis, a","Web Developer"];
+      let li = 0, ci = 0;
+      typingTextEl.innerHTML = '';
+      if(cursor){ cursor.style.display = 'inline-block'; cursor.style.animation = 'blink 1s steps(1) infinite'; }
+      function step(){
+        if(li >= lines.length){ if(cursor) cursor.style.animation = 'blink 1s steps(1) infinite'; return; }
+        const line = lines[li];
+        if(ci <= line.length){
+          typingTextEl.innerHTML = line.slice(0,ci) + (ci === line.length && li < lines.length - 1 ? '<br>' : '');
+          ci++;
+          setTimeout(step, 60 + Math.random()*60);
+        } else {
+          li++; ci = 0; setTimeout(step, 600);
+        }
+      }
+      step();
+    })();
+  </script>
+
+</body>
+</html>

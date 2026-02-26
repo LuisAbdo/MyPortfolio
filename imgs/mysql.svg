@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-label="MySQL logo placeholder">
+  <rect width="240" height="240" rx="20" fill="transparent"/>
+  <path d="M60 120c20-24 100-24 120 0v24H60z" fill="rgba(192,139,73,0.06)"/>
+  <text x="120" y="150" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="34" fill="#c08b49" font-weight="700" text-anchor="middle">MySQL</text>
+</svg>

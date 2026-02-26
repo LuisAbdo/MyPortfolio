@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-label="C# logo placeholder">
+  <rect width="240" height="240" rx="20" fill="transparent"/>
+  <g fill="rgba(192,139,73,0.06)">
+    <rect x="56" y="56" width="128" height="48" rx="8"/>
+    <rect x="56" y="136" width="128" height="32" rx="6"/>
+  </g>
+  <text x="120" y="150" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="36" fill="#c08b49" font-weight="700" text-anchor="middle">C#</text>
+</svg>
