@@ -16,14 +16,14 @@
     .menu a{color:var(--muted);font-weight:600}
     a{text-decoration:none;color:inherit}
 
-    /* HERO */
+  
     .hero{position:relative;min-height:92vh;padding:40px 6%;display:flex;align-items:center}
-    /* big faint background word behind everything */
+    
     .bg-code{position:absolute;inset:0;display:grid;place-items:center;z-index:1;pointer-events:none}
     .bg-code .word{font-weight:900;font-size:30vw;line-height:0.9;color:rgba(11,11,11,0.20);user-select:none;opacity:1;transform:translate3d(0,0,0);}
     .container{width:100%;max-width:1200px;margin:0 auto;display:flex;align-items:flex-start;gap:40px;position:relative}
     .hero-left{flex:1;position:relative;z-index:30}
-    /* typing text */
+
     .typing{display:inline-block;white-space:pre-wrap;font-weight:800}
     .typing .cursor{display:inline-block;width:2px;height:1.05em;background:var(--fg);margin-left:8px;vertical-align:bottom;opacity:1;animation:blink 1s steps(1) infinite}
     @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
@@ -32,30 +32,28 @@
     .hero-left p{color:var(--muted);margin-bottom:28px;max-width:520px}
     .cta{display:inline-flex;align-items:center;gap:12px;background:var(--accent);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:700}
 
-    /* hero photo (natural size, centered, no continuous motion) */
-    .hero-photo{position:absolute;left:50%;top:50%;/* base translate then adjustments from CSS vars */transform:translate(-50%,-50%) translate(var(--adj-x,0px), var(--adj-y,0px)) scale(var(--adj-scale,1));z-index:6;pointer-events:none}
+    
+    .hero-photo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translate(var(--adj-x,0px), var(--adj-y,0px)) scale(var(--adj-scale,1));z-index:6;pointer-events:none}
     .hero-photo img{display:block;width:auto;height:auto;border-radius:6px}
 
-    /* inner wrapper handles entrance translate and pendulum rotation via CSS vars */
+    
     .hero-photo-inner{--inner-ty:28px;--inner-float:0px;--pendulum-rot:0deg;transform:translateY(calc(var(--inner-ty) + var(--inner-float))) rotate(var(--pendulum-rot));transition:transform .3s ease;transform-origin:50% 0%}
     .hero-photo-inner img{display:block;width:auto;height:auto;border-radius:6px;opacity:1}
 
     .hero-photo.visible .hero-photo-inner{animation:swipeUp .8s cubic-bezier(.2,.9,.2,1) forwards}
     @keyframes swipeUp{from{--inner-ty:28px;opacity:0}to{--inner-ty:0px;opacity:1}}
 
-    /* pendulum animation updates custom property --pendulum-rot */
-     /* pendulum animation - adjust speed by changing --pendulum-duration below.
-       Smaller duration = faster swing. Example: 6s is noticeably faster than 14s. */
+
     :root{--pendulum-duration:6s}
-    /* animations disabled: keep hero photo static after reveal */
+    
     .hero-photo-inner.pendulum{animation:none}
-    /* floating uses a custom property to avoid clobbering transform */
+    
     .hero-photo-inner.floating{animation:none}
     .hero-photo-inner.pendulum.floating{animation:none}
     @keyframes pendulum{from{--pendulum-rot:-2deg}to{--pendulum-rot:2deg}}
     @keyframes floatVar{from{--inner-float:-10px}to{--inner-float:10px}}
 
-    /* hero adjust tab & panel */
+ 
     .hero-adjust-tab{position:absolute;right:6%;top:50%;transform:translateY(-50%);z-index:50;width:44px;height:44px;border-radius:8px;display:grid;place-items:center;border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,0.9);cursor:pointer}
     .hero-adjust-panel{position:fixed;right:20px;top:50%;transform:translateY(-50%);width:300px;background:#fff;color:var(--fg);border:1px solid rgba(0,0,0,.08);box-shadow:0 8px 30px rgba(11,11,11,.06);padding:12px;border-radius:10px;z-index:60;display:none}
     .hero-adjust-panel.open{display:block}
@@ -65,7 +63,6 @@
     .adjust-controls{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
     .adjust-controls button{padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,.08);background:transparent;cursor:pointer}
 
-    /* right side cards */
     .hero-right{width:320px;margin-left:auto;z-index:5;padding-top:48px}
     .card{border-top:1px solid rgba(0,0,0,.06);padding-top:26px;margin-bottom:26px}
     .card h3{font-size:13px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
@@ -77,7 +74,6 @@
 
     .scroll-down{margin-top:40px;display:inline-flex;background:var(--accent);width:58px;height:58px;border-radius:50%;align-items:center;justify-content:center}
 
-    /* ABOUT section */
     .about-section{padding:80px 6%;background:transparent;transition:background .8s ease,color .6s ease}
     .about-section.inview{background:linear-gradient(90deg,#ffffff,#f7f7f7)}
     .about-inner{max-width:1200px;margin:0 auto;display:flex;gap:40px;align-items:center}
@@ -92,11 +88,10 @@
     .about-photo img{width:auto;height:480px;object-fit:cover;border-radius:6px;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%);-webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%)}
     .about-photo.visible img{opacity:1;transform:none}
 
-    /* SKILLS section */
+  
     .skills-section{padding:80px 6%}
     .skills-inner{max-width:1200px;margin:0 auto}
-    /* Shelf / marquee style for learned languages (images only) */
-    /* make the shelf full-bleed and larger icons */
+  
     .skills-section{padding:80px 0}
     .skills-rect{background:linear-gradient(180deg,#111,#1a1a1a);color:var(--panel-fg);width:100vw;max-width:none;margin-left:calc(50% - 50vw);padding:22px 30px;border-radius:0;box-shadow:0 14px 30px rgba(0,0,0,.25);opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.2,.9,.2,1),transform .6s cubic-bezier(.2,.9,.2,1)}
     .skills-rect.visible{opacity:1;transform:none}
@@ -109,7 +104,7 @@
     .marquee-wrap:hover .marquee-track{animation-play-state:paused}
     @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-    /* misc responsive */
+
     @media(max-width:1100px){
       .container{flex-direction:column;align-items:center;padding:0 4%}
       .hero-left{text-align:center}
@@ -123,7 +118,7 @@
     @media(max-width:900px){
       .hero{padding:28px 4%}
       .container{gap:20px}
-      /* make hero photo stack above content on small screens */
+      
       .hero-photo{position:relative;left:auto;top:auto;transform:none;order:-1;margin:0 auto 12px;pointer-events:auto}
       .hero-photo img{width:56vw;height:auto;border-radius:8px}
       .bg-code .word{font-size:18vw}
@@ -136,7 +131,7 @@
       .menu{gap:12px;font-size:14px}
       .hero-left h1{font-size:28px}
       .hero-left p{max-width:100%}
-      /* reduce bg word on tiny screens */
+   
       .bg-code .word{font-size:22vw;opacity:.08}
     }
 
@@ -161,7 +156,7 @@
 
       <div class="hero-right">
         <div class="card"><h3>About Me</h3><p>Desenvolvedor apaixonado por tecnologia.</p><a href="#aboutSection">Learn More →</a></div>
-        <div class="card"><h3>My Work</h3><p>Projetos focados em performance.</p><a href="#">Browse Portfolio →</a></div>
+        <div class="card"><h3>My Work</h3><p>Projetos focados em performance.</p><a href="https://github.com/LuisAbdo?tab=repositories">My Projects →</a></div>
         <div class="card"><h3>Follow Me</h3>
           <div class="socials">
             <a href="https://www.linkedin.com/in/luis-abdo-2a31a7352/" aria-label="linkedin" title="LinkedIn" target="_blank" rel="noopener noreferrer">
@@ -182,7 +177,7 @@
     </div>
   </section>
 
-  <!-- Adjust panel (hidden by default) -->
+
   <div class="hero-adjust-panel" id="adjustPanel" aria-hidden="true">
     <div style="font-weight:700;margin-bottom:8px">Ajustar imagem</div>
     <div class="adjust-row"><label>Scale</label><input id="adjScale" type="range" min="0.3" max="2" step="0.01" value="0.66"><div id="adjScaleVal" style="width:44px;text-align:right">66%</div></div>
@@ -224,14 +219,14 @@ Acredito que unir lógica técnica com visão criativa é um diferencial. Busco 
               <img src="imgs/css.svg" alt="CSS">
               <img src="imgs/javascript.svg" alt="JavaScript">
               <img src="imgs/php.svg" alt="PHP">
-              <img src="imgs/c#.svg" alt="C#">
+              <img src="imgs/csharp.svg" alt="C#">
               <img src="imgs/mysql.svg" alt="MySQL">
-              <!-- duplicated items for seamless loop -->
+           
               <img src="imgs/html.svg" alt="HTML">
               <img src="imgs/css.svg" alt="CSS">
               <img src="imgs/javascript.svg" alt="JavaScript">
               <img src="imgs/php.svg" alt="PHP">
-              <img src="imgs/c#.svg" alt="C#">
+              <img src="imgs/csharp.svg" alt="C#">
               <img src="imgs/mysql.svg" alt="MySQL">
             </div>
           </div>
@@ -241,19 +236,17 @@ Acredito que unir lógica técnica com visão criativa é um diferencial. Busco 
   </section>
 
   <script>
-    // Hero image reveal (swipe up)
+   
     const heroPhoto = document.getElementById('heroPhoto');
     const heroPhotoInner = document.getElementById('heroPhotoInner');
     const heroImg = heroPhotoInner.querySelector('img');
     function revealHero(){
       heroPhoto.classList.add('visible');
-      // animations intentionally removed: keep image revealed but static
+    
     }
     if(heroImg.complete && heroImg.naturalWidth) revealHero(); else heroImg.addEventListener('load', revealHero);
 
-    // Scroll button removed
-
-    // IntersectionObserver for about section (background + reveal photo)
+    
     const aboutSection = document.getElementById('aboutSection');
     const aboutPhoto = document.getElementById('aboutPhoto');
     const aboutImg = aboutPhoto.querySelector('img');
@@ -269,7 +262,7 @@ Acredito que unir lógica técnica com visão criativa é um diferencial. Busco 
       obs.observe(aboutSection);
     } else { aboutSection.classList.add('inview'); aboutPhoto.classList.add('visible') }
 
-    // Skills rect reveal
+
     const skillsRect = document.getElementById('skillsRect');
     const skillsSection = document.getElementById('skillsSection');
     if(window.IntersectionObserver){
@@ -277,7 +270,6 @@ Acredito que unir lógica técnica com visão criativa é um diferencial. Busco 
       obs2.observe(skillsSection);
     } else { skillsRect.classList.add('visible') }
 
-    // Hero image adjust panel logic
     const adjustTab = document.getElementById('adjustTab');
     const adjustPanel = document.getElementById('adjustPanel');
     const adjScale = document.getElementById('adjScale');
@@ -307,16 +299,16 @@ Acredito que unir lógica técnica com visão criativa é um diferencial. Busco 
       localStorage.setItem('heroAdjust', JSON.stringify(state));
     }
 
-    // load saved
+
     try{
       const saved = JSON.parse(localStorage.getItem('heroAdjust'));
       if(saved){ if(saved.scale !== undefined) adjScale.value = saved.scale; if(saved.x !== undefined) adjX.value = saved.x; if(saved.y !== undefined) adjY.value = saved.y; applyAdjustments(saved); }
-    }catch(e){/* ignore */}
+    }catch(e){}
 
-    // always apply current inputs (defaults) so the hero reflects config when no saved state
+    
     applyAdjustments();
 
-    // open/close (guard in case the trigger is not present)
+ 
     if(adjustTab) adjustTab.addEventListener('click', ()=>{ adjustPanel.classList.toggle('open'); adjustPanel.setAttribute('aria-hidden', !adjustPanel.classList.contains('open')) });
     adjClose.addEventListener('click', ()=>{ adjustPanel.classList.remove('open'); adjustPanel.setAttribute('aria-hidden','true') });
 
